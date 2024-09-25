@@ -7,11 +7,12 @@ dotenv.config();
 const db = process.env.DB_NAME || 'convert_db'
 const username =process.env.DB_USER || 'root'
 const password = process.env.DB_PASSWORD || ''
+const host = process.env.DB_HOST || 'localhost'
 
 console.log(db)
 export const sequelize = new Sequelize(db, username, password, {
   dialect: 'mysql',
-  host: 'localhost',
+  host: host,
   models: [User,Convert],
 });
 
