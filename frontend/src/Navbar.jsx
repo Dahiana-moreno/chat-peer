@@ -5,8 +5,7 @@ const Navbar = () => {
   const { userId, logout} = useAuth();
 
   const navigate = useNavigate();
-  console.log(userId)
-  
+    
   const hadleLogout = ()=> {
     logout();
     navigate('/login')
@@ -19,7 +18,6 @@ const Navbar = () => {
       <Link to="/"></Link>
       {userId ? (
         <div className="space">
-          <Link to="/convert" >Converiones</Link>
           <button className="btn btn-danger" onClick={hadleLogout}>Cerrar sesion</button>
         </div>
       ) : (

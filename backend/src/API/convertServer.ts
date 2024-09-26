@@ -51,6 +51,7 @@ async getConvert( currencies: string[], source: string[]) {
 & format = 1  amount
 return
 */
+
 async convertBadge (to: string, from: string, amount: number){
   const fee = await this.getConvert([to], [from]);
   console.log(fee)
