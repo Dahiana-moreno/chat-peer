@@ -11,7 +11,6 @@ import imgCurrent from "../img/currency.jpg"
 
 const Convert = () => {
   const { userId} = useAuth();
-  console.log(userId)
 
   const uriBack = import.meta.env.VITE_URL_BACK;
   //se establece valores predertminados Cop USD 
@@ -31,22 +30,34 @@ const Convert = () => {
 const ConvertServe = async () => {
  
 try {
-  //enviamos los datos de la conversion
-  const response = await fetch(`${uriBack}/convertserve?amount=${amount}&from=${from}&to=${to}&user_id=${userId}`);
 
-  if (!response.ok) {
-    console.log('Error en la conevrsion Intentelo nuevamente')
+  const res = await axios.get(`${uriBack}/converts?user_id=${userId}`);
+  const respuesta = res.data
+  if (!respuesta.ok) {
+   // console.log('error al obtener los datos')
+  }
+  setConvertions(res.data)
+
+     //enviamos los datos de la conversion
+     const response = await axios.get(`${uriBack}/convertserve?amount=${amount}&from=${from}&to=${to}&user_id=${userId}`);
+     const resultConvert = response.data
+   //  console.log(response.data)
+   // extremos todos los datos del usuario unas vez validado que haya iniciado se sion
+
+   if (!response.ok) {
+   // console.log('Error en la conevrsion Intentelo nuevamente')
   } 
-  const data = await response.json();
-   setResult(data.resultado)
-
-   // extremos todos los datos del usuario incluyendo aun cuando no esta autenticado
-   const res = await axios.get(`${uriBack}/converts?user_id=${userId}`);
-   setConvertions(res.data)
+  setResult(resultConvert)
 
 
-if (!res.ok) {
-  console.log('error al obtenr los datos')
+  
+const updateConverts = await axios.get(`${uriBack}/converts?user_id=${userId}`);
+const resultUpdate = updateConverts.data
+
+if (updateConverts) {
+  setConvertions(resultUpdate)
+} else{
+  console.log('Error al actualizar las conversiones')
 }
   
 } catch (error) {
@@ -67,7 +78,7 @@ if (!res.ok) {
                 convertions.map((convertion) => (
                 <div className='resultSearch' key={convertion.id}>
                   <p>
-                    El resultado de: {convertion.amount}{convertion.from} = {result}{to}
+                    El resultado de: {convertion.amount}{convertion.from} = {convertion.resultado}{convertion.to}
                   </p>
                 </div>
                 ))

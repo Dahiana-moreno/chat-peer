@@ -3,7 +3,6 @@ import { jwtDecode } from 'jwt-decode';
 import { getUserId } from "../user/apiUserId";
 import {useNavigate} from "react-router-dom";
 
-;
 
 const AuthContext = createContext();
 
@@ -14,34 +13,40 @@ if(!context){
 }
 
 return context
- 
 
 }
 
 export const AuthProvider = ({children}) => {
   
   const [userId, setUserId] = useState(null)
-  const [isLoagin, setIsLoagin] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken= jwtDecode(token);
-      setUserId(decodedToken.UserId);
+      const usuarioId = decodedToken.UserId;
+
+      setUserId(usuarioId);
       
+    }else{
+      setUserId(null)
     }
-    setIsLoagin(false)
+  
   }, [])
 
   const login = (token) => {
     if (token) {
       const decodedToken = jwtDecode(token)
-      setUserId(decodedToken.UserId)
-
-      console.log(decodedToken.UserId)
-      console.log(UserId)
-      localStorage.setItem('token', token)
-      console.log(token)
+      
+      const UserId = decodedToken.UserId;
+      if (!UserId) {
+        throw new Error("User ID no encontro el token");
+        
+      }else{
+        setUserId(UserId)
+        localStorage.setItem('token', token)
+      }
+     
       console.log('login suscees')
     }
     else{
@@ -56,8 +61,9 @@ export const AuthProvider = ({children}) => {
   
   };
 
+  
   return(
-    <AuthContext.Provider value={{userId, isLoagin, login, logout}}>
+    <AuthContext.Provider value={{userId, login, logout}}>
       {children}
       </AuthContext.Provider>
   );

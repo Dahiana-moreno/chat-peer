@@ -4,17 +4,14 @@ import dotenv from "dotenv"
 import convertRoutes from "./routes/convert"
 import { sequelize } from "./database/db"
 
-
-
 dotenv.config();
 
 const port = process.env.PORT || 3000;
 const back = process.env.DB_HOST || '  http://localhost'
 const app = express()
+
 app.use(cors())
 app.use('/convert', convertRoutes)
-
-
 
 app.get("/", (req: Request, res: Response) =>{
   res.send("hello, Type!");

@@ -1,14 +1,14 @@
-import { Navigate, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-import { useEffect } from "react";
 
-export const PrivateRoute = ({ component: RouteComponent, ...res }) => {
+ const PrivateRoute = ({ children}) => {
   const {userId} = useAuth();
 
-    if (!userId) {
-      console.log('Usuario no autenticado');
-      return <Navigate to="/login" />
+    // Si el estado de userId es null, esperamos a que cargue
+    if (userId === null) {
+      return <div>..Loading</div>
     }
-
-return <Route {...res} element={<RouteComponent />} />;
-}
+    
+  return userId ? children : <Navigate to="/login" />
+};
+export default PrivateRoute
